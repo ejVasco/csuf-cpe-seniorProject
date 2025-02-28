@@ -171,15 +171,26 @@ cython_debug/
 .pypirc
 
 
-# Ignore .picture files
-*.picture
+# Ignore image files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.svg
+*.webp
 
-# Ignore common video file formats
+# Ignore video files
 *.mp4
-*.mkv
 *.avi
 *.mov
+*.mkv
 *.flv
 *.wmv
 *.webm
+*.m4v
+*.mpg
 *.mpeg
+*.3gp
