@@ -5,26 +5,30 @@ import time
 
 #--------------------------------------------------------------------
 # functions for specific filetype processing
-def webcam_process()-> None:
-    print("webcam start")
-    cap = cv2.VideoCapture(0) # 0 passes the webcam as video capture
-    print("webcam vid capture:")
+def webcam_process() -> None:
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Error: Could not open webcam")
+        return
     while True:
-        _, frame = cap.read()
-        cv2.imshow("webcam live", frame)
-        if break_key_pressed:
-            return
-def video_process() -> None:
-    pass
-def image_process() -> None:
-    pass
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Failed to capture frame")
+            break
+        cv2.imshow("webcam live", frame) 
+        if break_key_pressed():
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+    print("Debug: Exiting webcam_process()")
+
 
 #--------------------------------------------------------------------
 # other functions
 
 # returns true if break key pressed
 def break_key_pressed() -> bool:
-    return cv2.waitKey(1) == ord ('\\')
+    return cv2.waitKey(1) & 0xFF == ord('q')
 #--------------------------------------------------------------------
 # functions for file type detection
 
@@ -36,7 +40,7 @@ def IsImage(in_file) -> bool:
 def IsVideo(in_file) -> bool:
     cap = cv2.VideoCapture(in_file)
     if cap.isOpened():
-        cap.release
+        cap.release()
         return True
     return False
 #--------------------------------------------------------------------
@@ -97,8 +101,24 @@ invalid_file_error = f'''
    | {Fore.WHITE}Once program is running press \\ to exit        {Fore.YELLOW}|
    +------------------------------------------------+{Style.RESET_ALL}
 '''
+# alternate messages
+# goodbye_message = "test bye"
+# welcome_message = "test welcome"
+# missing_argument_error = "test missing arg error"
+# invalid_file_error = "test invalid file error"
 
 #---------------------------------------------------------------------
+def test():
+    print('webcam test')
+    cap = cv2.VideoCapture(0) # 0 passes the webcam as video capture
+    while True:
+        _, frame = cap.read()
+        cv2.imshow("webcam live", frame)
+        if cv2.waitKey(1) == ord ('q'):
+            cap.release()
+            return
+
+
 
 if __name__ == "__main__":
     import sys
@@ -106,4 +126,5 @@ if __name__ == "__main__":
         # kinda ASCII art box with r for a raw string b/c of the \
         print(missing_argument_error)
     else:
-        main(sys.argv[1])
+        test()
+        # main(sys.argv[1])
