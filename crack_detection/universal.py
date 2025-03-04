@@ -4,22 +4,39 @@ import numpy
 import time
 
 #--------------------------------------------------------------------
+#general process fram func
+def frame_proc(frame):
+    copy = numpy.copy(frame)
+    gray = cv2.cvtColor(copy, cv2.COLOR_BGR2GRAY)
+    blue = cv2.GaussianBlur(gray, (7,7),0)
+    edges = cv2.Canny(blue, 50,150)
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(copy, contours, -1, (0,255,0),-1)
+    cv2.imshow("Processed",copy)
+
+# vid/cam loop
+def loop_proc(window_name: str, cap: cv2.VideoCapture):
+    while (True):
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Failed to capture frame")
+            break
+        frame_proc(frame)
+        cv2.imshow(window_name, frame)
+        if break_key_pressed():
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+        
+
+
 # functions for specific filetype processing
 def webcam_process() -> None:
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("Error: Could not open webcam")
         return
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            print("Error: Failed to capture frame")
-            break
-        cv2.imshow("webcam live", frame) 
-        if break_key_pressed():
-            break
-    cap.release()
-    cv2.destroyAllWindows()
+    loop_proc("Webcam", cap)
     print("Debug: Exiting webcam_process()")
 
 
@@ -108,15 +125,15 @@ invalid_file_error = f'''
 # invalid_file_error = "test invalid file error"
 
 #---------------------------------------------------------------------
-def test():
-    print('webcam test')
-    cap = cv2.VideoCapture(0) # 0 passes the webcam as video capture
-    while True:
-        _, frame = cap.read()
-        cv2.imshow("webcam live", frame)
-        if cv2.waitKey(1) == ord ('q'):
-            cap.release()
-            return
+# def test():
+#     print('webcam test')
+#     cap = cv2.VideoCapture(0) # 0 passes the webcam as video capture
+#     while True:
+#         _, frame = cap.read()
+#         cv2.imshow("webcam live", frame)
+#         if cv2.waitKey(1) == ord ('q'):
+#             cap.release()
+#             return
 
 
 
@@ -126,5 +143,5 @@ if __name__ == "__main__":
         # kinda ASCII art box with r for a raw string b/c of the \
         print(missing_argument_error)
     else:
-        test()
-        # main(sys.argv[1])
+        # test()
+        main(sys.argv[1])
