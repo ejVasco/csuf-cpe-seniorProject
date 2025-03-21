@@ -3,3 +3,6 @@ Spring 2025 computer engineering senior project at California State University o
 
 wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
 
+TODO
+- add a progress bar
+- combine scripts to run as one
