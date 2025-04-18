@@ -1,0 +1,5 @@
+numpy
+opencv-python
+colorama
+segment-anything
+torch
