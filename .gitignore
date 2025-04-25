@@ -197,3 +197,4 @@ cython_debug/
 
 #ignore hidden mac directroy data files:
 .DS_Store
+crack_detection/sam_vit_h_4b8939.pth
