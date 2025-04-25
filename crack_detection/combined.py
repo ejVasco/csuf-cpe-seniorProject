@@ -1,3 +1,7 @@
+import os
+os.environ["GDK_BACKEND"] = "x11"
+
+
 from colorama import Fore, Style # color for error message
 import cv2
 import time
@@ -20,7 +24,7 @@ def main(input:str, mode:str):
     in_prev = 'i' in mode
     out_prev = 'o' in mode
     m_prev = 'm' in mode
-    if debug: print("iom preview: " + str(in_prev) + str(out_prev) + str(m_prev))
+    if debug: print(f"iom preview: {in_prev} {out_prev} {m_prev}")
 
     if debug: print("loading sam and sam auto mask gen")
     sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
@@ -30,15 +34,23 @@ def main(input:str, mode:str):
 
     # process frame is in here bc it uses the mask_generator
     def process_frame(frame):
+        # masking stuff
         masks = mask_generator.generate(frame)
         if masks:
+            if in_prev: copy1 = np.copy(frame)
             # find said largest mask
             largest_mask = max(masks, key=lambda m: np.sum(m['segmentation']))
             mask = largest_mask['segmentation'].astype(np.uint8) * 255
             # apply mask to frame
-            result = cv2.bitwise_and(frame, frame, mask=mask)
+            masked = cv2.bitwise_and(frame, frame, mask=mask)
         else:
-            result = frame        
+            masked = frame        
+        if m_prev: copy2 = np.copy(masked)
+        # crack detection
+
+        if in_prev: cv2.imshow("og", copy1)
+        if m_prev: cv2.imshow("masked", copy2)
+        result = np.copy(masked)
         return result
     if debug: print("starting vid capture")
     capture = cv2.VideoCapture(input)
@@ -52,12 +64,25 @@ def main(input:str, mode:str):
         frame_height = int(capture.get(4))
         fps = int(capture.get(cv2.CAP_PROP_FPS))
         fourcc = cv2.VideoWriter_fourcc(*'mp4v') # I keep getting an error on this line, but i mean... its working
+        out = "processed_" + Path(input).expanduser().name # processed_inputfile.mp4
         output = cv2.VideoWriter(out, fourcc, fps, (frame_width, frame_height))
-
-
-
-    
-        
+        if debug: print (f"ready to output video to {out}")
+    curr_frame = 0 # current frame
+    if debug: print("beginning processing")
+    while capture.isOpened():
+        ret, frame = capture.read()
+        if not ret:
+            break # breaks if capture failed to get ret (and frame)
+        processed_frame = process_frame(frame)
+        if output_vid : output.write(processed_frame)
+        if in_prev or m_prev or out_prev:
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        curr_frame = curr_frame + 1
+        print(f"progress: {curr_frame}/{total_frames}")
+    capture.release()
+    output.release()
+    cv2.destroyAllWindows()
 #------------------------------------------------
 # strings for outputting
 help_s = 'help placeholder'
