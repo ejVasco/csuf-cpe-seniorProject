@@ -25,4 +25,5 @@ Steps:<br/>
   - reads calib.npz, left_00.png and right_00.png
   - outputs diparity and depth at center
 3. run slope.py
-  - read disparity
+  - read disparity and calib.npz
+  - outputs slope in degrees
