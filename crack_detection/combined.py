@@ -49,6 +49,8 @@ def main(input:str, mode:str):
         if m_prev: cv2.imshow("masked", copy2)
         result = np.copy(masked)
         return result
+
+    
     if debug: print("starting vid capture")
     capture = cv2.VideoCapture(input)
     if debug: print("videocapture started")
