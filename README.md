@@ -31,7 +31,8 @@ yt-dlp -f "bestvideo[ext=mp4][height<=720]" --merge-output-format mp4 <video_url
 These videos download at 720p, to avoid higher resolutions which take longer to process.
 
 ## TODO
-task                         | progress    | note
------------------------------|-------------|-----------------
-progress bar                 | not started | should be simple
-combining processing scripts | in progress | going well
+task                               | progress    | note
+-----------------------------------|-------------|-----------------
+progress bar                       | not started | should be simple
+combining processing scripts       | in progress | going well
+output "crack level" number to csv | not started |

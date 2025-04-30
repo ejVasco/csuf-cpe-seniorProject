@@ -1,16 +1,13 @@
-import os
-os.environ["GDK_BACKEND"] = "x11"
-
-
-from colorama import Fore, Style # color for error message
 import cv2
 import time
 import torch
 import numpy as np
 from segment_anything import sam_model_registry, SamAutomaticMaskGenerator
 from pathlib import Path
+#------------------------------------------------
 # variables for debugging
-debug : bool =  True 
+debug : bool =  True
+if debug: print(f"\n  Debugging on\n")
 output_vid : bool = True 
 # sam variables
 sam_checkpoint = "sam_vit_h_4b8939.pth"
@@ -58,10 +55,12 @@ def main(input:str, mode:str):
     # get total frames to use for percent calc for percentage progress bar
     total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     # get og dimensions and fps to use for output vid
+    if debug: print(f"total frames found: {total_frames}")
     if output_vid:
         if debug: print ("getting og vid properties to use for output vid")
         frame_width = int(capture.get(3))
         frame_height = int(capture.get(4))
+        if debug: print (f"vid dimensions: x={frame_width} y={frame_height}")
         fps = int(capture.get(cv2.CAP_PROP_FPS))
         fourcc = cv2.VideoWriter_fourcc(*'mp4v') # I keep getting an error on this line, but i mean... its working
         out = "processed_" + Path(input).expanduser().name # processed_inputfile.mp4
