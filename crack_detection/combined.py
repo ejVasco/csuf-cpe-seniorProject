@@ -14,6 +14,7 @@ sam_checkpoint = "sam_vit_h_4b8939.pth"
 model_type = "vit_h"
 # what device to use for processing
 device = "cuda" if torch.cuda.is_available() else "cpu"
+if debug: print(f"device: {device}")
 #------------------------------------------------
 def main(input:str, mode:str):
     # preview mode handling
