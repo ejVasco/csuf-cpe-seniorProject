@@ -34,7 +34,6 @@ Pygments==2.19.1
 requests==2.32.3
 rich==14.0.0
 segment-anything==1.0
-setuptools==80.0.1
 soupsieve==2.7
 sympy==1.14.0
 torch==2.7.0
