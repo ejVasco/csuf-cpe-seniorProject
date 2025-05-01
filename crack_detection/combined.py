@@ -59,7 +59,9 @@ def main(input:str, mode:str):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert frame to grayscale
         frame = cv2.GaussianBlur(frame, (7,7), 0) # blurs frame
         frame = cv2.Canny(frame, 50, 150) # edge detects frame
-        frame, _ = cv2.findContours(frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) # finds contours
+        frame = np.zeros((frame.shape[0], frame.shape[1], 3), dtype=np.uint8) # turns frame to a black background
+        cv2.drawContours(frame, contours, -1, (255, 255, 255), 1)  # draws white contours on black frame
 
         # output preview
         result = np.copy(frame)
