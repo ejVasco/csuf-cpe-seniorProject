@@ -34,5 +34,6 @@ These videos download at 720p, to avoid higher resolutions which take longer to 
 task                               | progress    | note
 -----------------------------------|-------------|-----------------
 progress bar                       | not started | should be simple
-combining processing scripts       | in progress | going well
+estimated time till finish         | not started | idk
+combining processing scripts       | testing | going well
 output "crack level" number to csv | not started |
