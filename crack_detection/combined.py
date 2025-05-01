@@ -56,7 +56,7 @@ def main(input:str, mode:str):
         if m_prev: copy2 = np.copy(frame)
         
         # crack detection processing
-        frame = cv2.cvtColor(frame) # convert frame to grayscale
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # convert frame to grayscale
         frame = cv2.GaussianBlur(frame, (7,7), 0) # blurs frame
         frame = cv2.Canny(frame, 50, 150) # edge detects frame
         frame, _ = cv2.findContours(frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
