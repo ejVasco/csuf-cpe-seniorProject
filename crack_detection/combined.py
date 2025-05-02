@@ -48,11 +48,22 @@ def main(input:str, mode:str):
             # find said largest mask
             largest_mask = max(masks, key=lambda m: np.sum(m['segmentation']))
             mask = largest_mask['segmentation'].astype(np.uint8) * 255
-            # apply mask to frame
-            # frame = cv2.bitwise_and(frame, frame, mask=mask) # blacks out parts of frame
-            # different method
-            mask_inv = cv2.bitwise_not(mask)  # this will inpaint to create a less harsh edge to prevent cracks being detected along this edge
+
+            # apply mask to frame - method 0 will result in the edge of the mask being detected as a crack
+            # method 0 - black out not masked parts
+            # frame = cv2.bitwise_and(frame, frame, mask=mask)
+            # method 1 - infill not masked parts
+            mask_inv = cv2.bitwise_not(mask)
             frame = cv2.inpaint(frame, mask_inv, 3, cv2.INPAINT_TELEA)
+            # method 2 - blur edges of mask then apply
+            # blurred_mask = cv2.GaussianBlur(mask, (15, 15), 0)
+            # blurred_mask = cv2.normalize(blurred_mask, None, 0, 255, cv2.NORM_MINMAX)
+            # blurred_mask = blurred_mask.astype(np.uint8)
+            # frame = cv2.bitwise_and(frame, frame, mask=blurred_mask)
+            # method 3 - dilate mask in attempt to cover edges
+            # dilated_mask = cv2.dilate(mask, np.ones((5, 5), np.uint8), iterations=1)
+            # crack_area_mask = cv2.bitwise_not(dilated_mask)
+            # frame = cv2.bitwise_and(frame, frame, mask=crack_area_mask)
         # if no largest mask is found, assume whole image is the ground
 
         # masked preview 
