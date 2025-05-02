@@ -125,8 +125,8 @@ def main(input:str, mode:str):
 
         # progress output
         curr_frame = curr_frame + 1
-        percent = curr_frame / total_frames
-        print(f"progress: {curr_frame}/{total_frames} --- {percent}")
+        percent = curr_frame / total_frames * 100.0
+        print(f"progress: {curr_frame}/{total_frames} --- {percent:.3f}%")
 
     # release cv2 windows if open
     capture.release()
