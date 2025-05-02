@@ -24,7 +24,7 @@ TODO
 - add a progress bar
 To download videos for testing:
 ## yt-dlp
-Note: this is a command **only** for downloading test videos.
+Note: this is a command **only** for downloading **test** videos.
 ```bash
 yt-dlp -f "bestvideo[ext=mp4][height<=720]" --merge-output-format mp4 <video_url>
 ```
@@ -35,5 +35,5 @@ task                               | progress    | note
 -----------------------------------|-------------|-----------------
 progress bar                       | not started | should be simple
 estimated time till finish         | not started | idk
-combining processing scripts       | testing | going well
+combining processing scripts       | finished    | going well
 output "crack level" number to csv | not started |

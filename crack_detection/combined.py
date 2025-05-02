@@ -49,7 +49,10 @@ def main(input:str, mode:str):
             largest_mask = max(masks, key=lambda m: np.sum(m['segmentation']))
             mask = largest_mask['segmentation'].astype(np.uint8) * 255
             # apply mask to frame
-            frame = cv2.bitwise_and(frame, frame, mask=mask) # blacks out parts of frame
+            # frame = cv2.bitwise_and(frame, frame, mask=mask) # blacks out parts of frame
+            # different method
+            mask_inv = cv2.bitwise_not(mask)  # this will inpaint to create a less harsh edge to prevent cracks being detected along this edge
+            frame = cv2.inpaint(frame, mask_inv, 3, cv2.INPAINT_TELEA)
         # if no largest mask is found, assume whole image is the ground
 
         # masked preview 
