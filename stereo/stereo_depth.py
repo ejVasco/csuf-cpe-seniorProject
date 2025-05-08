@@ -113,5 +113,14 @@ print(f"depth at center: {depth_at_center: .2f} meters")
 slope = estimate_slope_from_depth(depth_map, fx, fy, cx, cy)
 print(f"Estimated surface slope: {slope:.2f} degrees")
 
+output_text = f"Depth at center: {depth_at_center:.2f} meters\n"
+output_text += f"Estimated surface slope: {slope:.2f} degrees\n"
+
+# Write to file
+with open("depth_slope_report.txt", "w") as f:
+    f.write(output_text)
+
+print("Results written to depth_slope_report.txt")
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
