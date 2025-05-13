@@ -1,39 +1,27 @@
-import subprocess
+# landslide_predictor.py
+import csv
+import math
 
-def run_main_program():
-    # Run the main script that generates the text file
-    print("Running depth and slope analysis...")
-    subprocess.run(["python", "stereo_depth.py"], check=True)
-    print("Analysis complete.\n")
+def compute_landslide_risk(depth, slope, rainfall, saturation):
+    # Replace with your actual model/formula
+    risk = (depth * math.tan(math.radians(slope))) + (rainfall * 0.1) + (saturation * 50)
+    return min(risk, 100)  # Cap at 100% likelihood
 
-def extract_depth_and_slope(filepath):
-    with open(filepath, 'r') as file:
-        lines = file.readlines()
-        depth_line = lines[0]
-        slope_line = lines[1]
+filename = "landslide_data.csv"
 
-        # Parse values
-        depth = float(depth_line.strip().split(":")[1].split()[0])
-        slope = float(slope_line.strip().split(":")[1].split()[0])
+with open(filename, mode='r') as file:
+    reader = csv.DictReader(file)
+    rows = list(reader)
+    if not rows:
+        raise ValueError("No data found in CSV.")
 
-        return depth, slope
+    latest = rows[-1]
+    depth = float(latest["Depth (m)"])
+    slope = float(latest["Slope (deg)"])
+    rainfall = float(latest.get("Rainfall (mm)", 0))
+    saturation = float(latest.get("Soil Saturation", 0))
 
-def main():
-    report_file = "depth_slope_report.txt"
+    risk = compute_landslide_risk(depth, slope, rainfall, saturation)
 
-    # Step 1: Run the analysis script
-    run_main_program()
-
-    # Step 2: Extract the values
-    depth, slope = extract_depth_and_slope(report_file)
-    print(f"Extracted depth: {depth:.2f} meters")
-    print(f"Extracted slope: {slope:.2f} degrees")
-
-    # Step 3: Example logic using the values
-    if slope > 30:
-        print("⚠️  Warning: Steep slope detected!")
-    else:
-        print("✅ Slope is within normal range.")
-
-if __name__ == "__main__":
-    main()
+    print(f"📊 Depth: {depth} m | Slope: {slope}°")
+    print(f"🌧️ Estimated Landslide Risk: {risk:.2f}%")
