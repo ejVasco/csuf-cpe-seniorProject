@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import csv, os
+from datetime import datetime
 from sklearn.linear_model import RANSACRegressor
 
 
@@ -113,14 +115,16 @@ print(f"depth at center: {depth_at_center: .2f} meters")
 slope = estimate_slope_from_depth(depth_map, fx, fy, cx, cy)
 print(f"Estimated surface slope: {slope:.2f} degrees")
 
-output_text = f"Depth at center: {depth_at_center:.2f} meters\n"
-output_text += f"Estimated surface slope: {slope:.2f} degrees\n"
-
-# Write to file
-with open("depth_slope_report.txt", "w") as f:
-    f.write(output_text)
-
-print("Results written to depth_slope_report.txt")
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+filename = "landslide_data.csv"
+file_exists = os.path.isfile(filename)
+
+with open(filename, mode='a', newline='') as file:
+    writer = csv.writer(file)
+    if not file_exists:
+        writer.writerow(["Timestamp", "Depth (m)", "Slope (deg)"])
+    writer.writerow([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), f"{depth_at_center:.2f}", f"{slope:.2f}"])
+
+print("✅ Stereo analysis data written to CSV.")
